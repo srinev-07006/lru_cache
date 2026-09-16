@@ -47,32 +47,32 @@ The operations flow as follows:
 ### GET path
 ```mermaid
 flowchart TD
-    Start[lru_get(key)] --> HashLookup[Hash Table Lookup]
-    HashLookup --> Hit{Found?}
-    Hit -- Y --> Unlink[Unlink Node from current list position]
-    Unlink --> InsertHead[Insert Node at MRU position]
-    InsertHead --> RetV[Return Value]
-    Hit -- N --> Ret0[Return Miss]
+    Start["lru_get(key)"] --> HashLookup["Hash Table Lookup"]
+    HashLookup --> Hit{"Found?"}
+    Hit -->|"Y"| Unlink["Unlink Node from current list position"]
+    Unlink --> InsertHead["Insert Node at MRU position"]
+    InsertHead --> RetV["Return Value"]
+    Hit -->|"N"| Ret0["Return Miss"]
 ```
 
 ### PUT path
 ```mermaid
 flowchart TD
-    Start[lru_put(key, val)] --> HashLookup[Hash Lookup]
-    HashLookup --> Found{Exists?}
-    Found -- Y --> Update[Update value on Node]
-    Update --> Unlink[Unlink from list]
-    Unlink --> InsHead[Insert Node at MRU]
+    Start["lru_put(key, val)"] --> HashLookup["Hash Lookup"]
+    HashLookup --> Found{"Exists?"}
+    Found -->|"Y"| Update["Update value on Node"]
+    Update --> Unlink["Unlink from list"]
+    Unlink --> InsHead["Insert Node at MRU"]
 
-    Found -- N --> IsFull{Is Size >= Cap?}
-    IsFull -- Y --> GetLRU[Find LRU node at list_tail.prev]
-    GetLRU --> UnlinkBoth[Remove from List AND Hash Table]
-    UnlinkBoth --> Free[Free Memory]
-    Free --> AllocNew
+    Found -->|"N"| IsFull{"Is Size >= Cap?"}
+    IsFull -->|"Y"| GetLRU["Find LRU node at list_tail.prev"]
+    GetLRU --> UnlinkBoth["Remove from List AND Hash Table"]
+    UnlinkBoth --> Free["Free Memory"]
+    Free --> AllocNew["Allocate New Node"]
     
-    IsFull -- N --> AllocNew[Allocate New Node]
-    AllocNew --> LinkHT[Add to Hash Table]
-    LinkHT --> LinkHead[Insert at MRU list position]
+    IsFull -->|"N"| AllocNew
+    AllocNew --> LinkHT["Add to Hash Table"]
+    LinkHT --> LinkHead["Insert at MRU list position"]
 ```
 
 ---

@@ -1,0 +1,14 @@
+# Build output
+build/
+
+# Test binaries
+tests/*.exe
+
+# Windows shortcuts
+*.lnk
+
+# One-off helper scripts
+*.py
+
+# Claude settings
+.claude/

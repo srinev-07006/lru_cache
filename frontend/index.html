@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LRU Cache Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>🗄️ LRU Cache Visualizer</h1>
+        <p class="subtitle">O(1) Least Recently Used Cache — Hash Table + Doubly Linked List</p>
+    </header>
+
+    <main>
+        <!-- ── Controls Panel ────────────────────────────────── -->
+        <section class="controls-panel">
+            <div class="control-group">
+                <h3>GET (Lookup)</h3>
+                <div class="input-row">
+                    <input type="number" id="get-key" placeholder="1">
+                    <button id="btn-get" onclick="doGet()">GET</button>
+                </div>
+            </div>
+            <div class="control-group">
+                <h3>PUT (Insert/Update)</h3>
+                <div class="input-row">
+                    <input type="number" id="put-key" placeholder="1">
+                    <input type="number" id="put-value" placeholder="100">
+                    <button id="btn-put" onclick="doPut()">PUT</button>
+                </div>
+            </div>
+            <div class="control-group">
+                <h3>DEL (Remove)</h3>
+                <div class="input-row">
+                    <input type="number" id="del-key" placeholder="1">
+                    <button id="btn-del" onclick="doDelete()" style="background: var(--red);">DEL</button>
+                </div>
+            </div>
+            <div class="control-group">
+                <h3>Capacity</h3>
+                <div class="input-row">
+                    <input type="number" id="capacity-input" placeholder="5" min="1" max="50">
+                    <button id="btn-capacity" onclick="doResize()">Resize</button>
+                </div>
+            </div>
+            <div class="control-group">
+                <h3>Demo</h3>
+                <button id="btn-demo" onclick="runDemo()">▶ Run Scripted Demo</button>
+            </div>
+        </section>
+
+        <!-- ── Stats Bar ─────────────────────────────────────── -->
+        <section class="stats-bar">
+            <div class="stat">
+                <span class="stat-label">Hits</span>
+                <span class="stat-value" id="stat-hits">0</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Misses</span>
+                <span class="stat-value" id="stat-misses">0</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Hit Rate</span>
+                <span class="stat-value" id="stat-hitrate">—</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Size</span>
+                <span class="stat-value" id="stat-size">0</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Capacity</span>
+                <span class="stat-value" id="stat-capacity">5</span>
+            </div>
+            <div class="stat occupancy">
+                <span class="stat-label">Occupancy</span>
+                <div class="occupancy-bar">
+                    <div class="occupancy-fill" id="occupancy-fill"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Visualization Area ────────────────────────────── -->
+        <div class="viz-container">
+            <!-- Doubly Linked List Visualization -->
+            <section class="viz-section list-viz">
+                <h2>Doubly Linked List <span class="viz-hint">(MRU → LRU)</span></h2>
+                <div class="list-container" id="list-container">
+                    <div class="sentinel head-sentinel">HEAD</div>
+                    <div class="list-nodes" id="list-nodes">
+                        <div class="empty-message">Cache is empty</div>
+                    </div>
+                    <div class="sentinel tail-sentinel">TAIL</div>
+                </div>
+            </section>
+
+            <!-- Hash Table Visualization -->
+            <section class="viz-section hash-viz">
+                <h2>Hash Table <span class="viz-hint">(Separate Chaining)</span></h2>
+                <div class="hash-table" id="hash-table">
+                    <div class="empty-message">No buckets to display</div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ── Latency Comparison ────────────────────────────── -->
+        <section class="viz-section latency-section">
+            <h2>Latency Comparison <span class="viz-hint">(Cache Hit vs. DB Miss)</span></h2>
+            <div class="latency-container">
+                <div class="latency-chart" id="latency-chart">
+                    <div class="latency-axis">
+                        <span>0ms</span>
+                        <span>100ms</span>
+                        <span>200ms</span>
+                        <span>300ms</span>
+                    </div>
+                </div>
+                <div class="latency-legend">
+                    <span class="legend-item hit-legend">● Cache Hit</span>
+                    <span class="legend-item miss-legend">● DB Miss</span>
+                </div>
+                <div class="latency-averages">
+                    <div>Avg Hit: <strong id="avg-hit">—</strong></div>
+                    <div>Avg Miss: <strong id="avg-miss">—</strong></div>
+                    <div>Speedup: <strong id="speedup">—</strong></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Operation Log ─────────────────────────────────── -->
+        <section class="viz-section log-section">
+            <h2>Operation Log</h2>
+            <div class="log-container" id="log-container"></div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
